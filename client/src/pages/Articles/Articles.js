@@ -51,75 +51,7 @@ class Articles extends React.Component {
     }
 
     render() {
-        return (
-            <div className="container">
-                <form>
-                    <div className="input">
-                        <label>Article Name</label>
-                        <input
-                            value={this.state.title}
-                            onChange={this.handleInputChange}
-                            name="title"
-                            placeholder="Article Name"
-                        />
-                    </div>
-                    <div className="input">
-                        <label>Start Year</label>
-                        <input
-                            value={this.state.startYear}
-                            onChange={this.handleInputChange}
-                            name="startYear"
-                            placeholder="YYYYMMDD Format"
-                        />
-                    </div>
-                    <div className="input">
-                        <label>End Year</label>
-                        <input
-                            value={this.state.endYear}
-                            onChange={this.handleInputChange}
-                            name="endYear"
-                            placeholder="YYYYMMDD Format"
-                        />
-                    </div>
-                    <a className="waves-effect waves-light btn" onClick={this.handleFormSubmit}>
-                        Search
-                    </a>
-                </form>
-                {this.state.articles.length
-                    ? (<h4 className="center">Top 5 Results</h4>)
-                    : <div></div>}
-                {this.state.title
-                    ? (<div>
-                        {this.state.articles.map(article => (
-                            <ul key={article.url} className="collection with-header">
-                                <br />
-                                <li className="collection-header"><h4>{article.title}</h4></li>
-                                <li className="collection-item"><a href={article.url} target="blank">{article.url}</a></li>
-                                <li id="fix" className="collection-item">{article.date}<a className="secondary-content waves-effect waves-light btn blue" onClick={() => this.saveArticle(article.title, article.date, article.url)}>
-                                    Save
-                        </a></li>
-                            </ul>
-                        ))}</div>)
-                    : <div></div>
-                }
-
-                {this.state.savedArticles.length
-                    ? (<div>
-                        <h4 className="center">Saved Articles</h4>
-                        {this.state.savedArticles.map(article => (
-                            <ul key={article.url} className="collection with-header">
-                                <br />
-                                <li className="collection-header"><h4>{article.title}</h4></li>
-                                <li className="collection-item"><a href={article.url} target="blank">{article.url}</a></li>
-                                <li id="fix" className="collection-item">{article.date}<a className="secondary-content waves-effect waves-light btn red" onClick={() => this.deleteArticle(article._id)}>
-                                    Delete
-                    </a></li>
-                            </ul>
-                        ))}</div>)
-                    : <h1 className="center">No Saved Articles</h1>
-                }
-            </div>
-        )
+        
     }
 }
 
