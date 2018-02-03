@@ -7,6 +7,7 @@ import { logout } from '../src/components/helpers/auth'
 import { firebaseAuth } from '../src/components/config/constants'
 import '../src/components/Login/Login.css'
 import API from "./utils/API";
+import Button from "./components/button/button";
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -54,9 +55,30 @@ export default class App extends Component {
 
     API.loadCryptos () 
       .then(res => this.setState({loadCryptos: res.data}));
+    
   }
   componentWillUnmount () {
     this.removeListener()
+  }
+
+  callChart = (coinName) => {
+    console.log("coinName")
+
+
+    new window.TradingView.widget({
+      "width": 980,
+      "height": 610,
+      "symbol": "NASDAQ:AAPL",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "Light",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "allow_symbol_change": true,
+      "hideideas": true
+    })
   }
   render() {
     return this.state.loading === true ? <h1>Loading</h1> : (
@@ -118,7 +140,8 @@ export default class App extends Component {
             </div>
             {this.state.loadCryptos.map(coin => (
               <div className="row" key={coin.name}>
-              <div className="col m4">{coin.name}</div>
+              <div className="col m4 coinName" onClick={() => this.callChart(coin.abv)}>{coin.name}
+              </div>
               <div className="col m4">{coin.price}</div>
               <div className="col m4">{coin.percent}</div>
               </div>
@@ -129,22 +152,3 @@ export default class App extends Component {
     );
   }
 }
-
-
-// import React from "react";
-// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import Home from "./pages/Home";
-// import User from './pages/Dashboard'
-
-// const App = () =>
-//   <Router>
-//     <div>
-//       <Switch>
-//         <Route exact path="/" component={Home} />
-//         <Route exact path="/dashboard" component={User} />
-//       </Switch>
-//     </div>
-//   </Router>;
-
-// export default App;
-

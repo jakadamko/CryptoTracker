@@ -11,6 +11,7 @@ router.get("/", function(req, res) {
 router.get("/api/coins", function(req, res) {
   var results = [];
   var names = [];
+  var abv = [];
   var prices = [];
   var percentages = [];
   var rating = [];
@@ -27,6 +28,11 @@ router.get("/api/coins", function(req, res) {
 
       prices.push(price);
     });
+    $("span.hidden-xs").each(function(i, element) {
+      var abvName = $(element).text();
+
+      abv.push(abvName);
+    });
     $("td.percent-24h").each(function(i, element) {
       var percent = $(element).text();
 
@@ -34,6 +40,7 @@ router.get("/api/coins", function(req, res) {
     });
     for (var i = 0; i < names.length; i++) {
       results.push({
+        abv: abv[i],
         name: names[i],
         price: prices[i],
         percent: percentages[i]
