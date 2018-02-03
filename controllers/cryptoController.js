@@ -2,63 +2,45 @@ const path = require("path");
 const router = require("express").Router();
 const db = require("../models");
 const axios = require("axios");
+const cheerio = require("cheerio");
 
-router.get("/dashboard", function (req, res) {
-  if (req.session.user) {
-    res.json(req.session.user);
-  } else {
-    res.redirect("/")
-  }
-});
-
-router.get("/", function (req, res) {
-  if (req.session.user) {
-    res.redirect("/dashboard");
-  }
+router.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-router.post("/api/coinwatched", function (req, res) {
-  User.update({ _id: req.session.user._id }, { $push: { coins: { coinName: req.body.coinName, coinPrice: req.body.coinPrice } } })
-      .then(function () {
-          return User.findOne({ "username": req.session.user.username, "password": req.session.user.password })
-      }).then(function (dbUser) {
-          req.session.user = dbUser;
-          res.redirect("/dashboard");
-      })
-      .catch(function (err) {
-          res.json(err);
-      })
-});
+router.get("/api/coins", function(req, res) {
+  var results = [];
+  var names = [];
+  var prices = [];
+  var percentages = [];
+  var rating = [];
+  axios.get("https://coinmarketcap.com/").then(function(response) {
+    var $ = cheerio.load(response.data);
 
-router.post("/login", function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+    $("a.currency-name-container").each(function(i, element) {
+      var name = $(element).text();
 
-  User.findOne({ "username": username, "password": password })
-      .then(function (dbUser) {
-          req.session.user = dbUser;
-          res.redirect("/dashboard");
-      })
-      .catch(function (err) {
-          res.json(err);
+      names.push(name);
+    });
+    $("a.price").each(function(i, element) {
+      var price = $(element).text();
+
+      prices.push(price);
+    });
+    $("td.percent-24h").each(function(i, element) {
+      var percent = $(element).text();
+
+      percentages.push(percent);
+    });
+    for (var i = 0; i < names.length; i++) {
+      results.push({
+        name: names[i],
+        price: prices[i],
+        percent: percentages[i]
       });
+    }
+    res.json(results);
+  });
 });
-
-router.get("/logout", function (req, res) {
-  req.session.destroy(function (err) {
-      if (err) {
-          res.negotiate(err)
-      }
-      res.redirect("/");
-  })
-});
-
-router.post("/register", function (req, res) {
-  User.create(req.body)
-      .then(function (dbUser) {
-          res.json(dbUser);
-      })
-})
 
 module.exports = router;

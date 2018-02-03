@@ -6,9 +6,7 @@ import Dashboard from '../src/components/Login/protected/Dashboard'
 import { logout } from '../src/components/helpers/auth'
 import { firebaseAuth } from '../src/components/config/constants'
 import '../src/components/Login/Login.css'
-
-
-
+import API from "./utils/API";
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -36,7 +34,9 @@ export default class App extends Component {
   state = {
     authed: false,
     loading: true,
+    loadCryptos: []
   }
+
   componentDidMount () {
     this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
@@ -51,6 +51,9 @@ export default class App extends Component {
         })
       }
     })
+
+    API.loadCryptos () 
+      .then(res => this.setState({loadCryptos: res.data}));
   }
   componentWillUnmount () {
     this.removeListener()
@@ -113,6 +116,13 @@ export default class App extends Component {
                 <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
               </Switch>
             </div>
+            {this.state.loadCryptos.map(coin => (
+              <div className="row" key={coin.name}>
+              <div className="col m4">{coin.name}</div>
+              <div className="col m4">{coin.price}</div>
+              <div className="col m4">{coin.percent}</div>
+              </div>
+            ))}
           </div>
         </div>
       </BrowserRouter>
