@@ -79,6 +79,12 @@ export default class App extends Component {
       "allow_symbol_change": true,
       "hideideas": true
     })
+    var a = document.createElement('a');
+      var linkText = document.createTextNode("my title text");
+      a.appendChild(linkText);
+      a.title = "Go Back";
+      a.href = "/";
+      document.body.appendChild(a);
   }
   render() {
     return this.state.loading === true ? <h1>Loading</h1> : (
