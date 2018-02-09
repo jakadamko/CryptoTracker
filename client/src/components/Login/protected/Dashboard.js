@@ -4,7 +4,7 @@ import API from "../../../utils/API";
 export default class Dashboard extends Component {
   state = {
     cName: "",
-    cPrice: null
+    cPrice: ""
   };
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -12,12 +12,10 @@ export default class Dashboard extends Component {
       [name]: value
     });
   };
-  handleFormSubmit = event => {
-    event.preventDefault();
-    API.saveCrypto(
-      this.state.cName,
-      this.state.cPrice,
-    ).then(res => this.setState({ articles: res.data }));
+  saveCrypto = (name, price) => {
+    API.saveCrypto({coinName: name, coinPrice: price})
+      .then(res => this.setState({ articles: res.data })
+    );
   };
 
   render() {
@@ -35,7 +33,12 @@ export default class Dashboard extends Component {
           onChange={this.handleInputChange}
           name="cPrice"
         />
-        <button onClick={() => this.handleFormSubmit(this.state.cName, this.state.cPrice)}>Submit</button>
+        <a
+          className="wave-effect wave-light btn"
+          onClick={() => this.saveCrypto(this.state.cName, this.state.cPrice)}
+        >
+          Submit
+        </a>
       </div>
     );
   }
