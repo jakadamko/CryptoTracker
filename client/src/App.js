@@ -68,7 +68,7 @@ export default class App extends Component {
     new window.TradingView.widget({
       "width": 980,
       "height": 610,
-      "symbol": "NASDAQ:AAPL",
+      "symbol": "Bitstamp:" + coinName + "usd",
       "interval": "D",
       "timezone": "Etc/UTC",
       "theme": "Light",
