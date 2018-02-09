@@ -1,9 +1,9 @@
 import firebase from 'firebase';
 
 const config = {
-  apiKey: "AIzaSyCzQTtL8TaCjtAURSrbwOvVgRpw2xE6sfM",
-  authDomain: "AIzaSyCzQTtL8TaCjtAURSrbwOvVgRpw2xE6sfM",
-  databaseURL: "https://cryptotracker-bf66d.firebaseio.com"
+  apiKey: "AIzaSyAf7z9JGe8KQ0rlPz8nzJBRxwispah_I6A",
+  authDomain: "cryptotracker-ae4d7.firebaseapp.com",
+  databaseURL: "https://cryptotracker-ae4d7.firebaseio.com"
 }
 
 firebase.initializeApp(config)

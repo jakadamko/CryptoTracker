@@ -7,7 +7,6 @@ import { logout } from '../src/components/helpers/auth'
 import { firebaseAuth } from '../src/components/config/constants'
 import '../src/components/Login/Login.css'
 import API from "./utils/API";
-import Button from "./components/button/button";
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (

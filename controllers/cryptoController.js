@@ -8,19 +8,15 @@ router.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-router.post("/api/coinwatched", function (req, res) {
-
-  //Instead of req.session.user._id we have to get the id from the user through react so it's going to need something else here
-  User.update({ _id: req.session.user._id }, { $push: { coins: { coinName: req.body.coinName, coinPrice: req.body.coinPrice } } })
-      .then(function () {
-          return User.findOne({ "username": req.session.user.username, "password": req.session.user.password })
-      }).then(function (dbUser) {
-          req.session.user = dbUser;
-          res.redirect("/dashboard");
-      })
-      .catch(function (err) {
-          res.json(err);
-      })
+router.post("/api/saveCoins", function(req, res) {
+  User.update(
+    { _id: req.session.user._id },
+    {
+      $push: {
+        coins: { coinName: req.body.coinName, coinPrice: req.body.coinPrice }
+      }
+    }
+  );
 });
 
 router.get("/api/coins", function(req, res) {
