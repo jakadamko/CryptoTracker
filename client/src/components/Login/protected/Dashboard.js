@@ -22,9 +22,8 @@ export default class Dashboard extends Component {
   }
 
   saveCrypto = (name, price, uid) => {
-    API.saveCrypto({ coinName: name, coinPrice: price, uid }).then(
-      this.setState({ cName: "", cPrice: "" })
-    );
+    API.saveCrypto({ coinName: name, coinPrice: price, uid })
+    .then(() => this.getWatched(this.state.uid));
   };
 
   getWatched = uid => {
@@ -65,8 +64,10 @@ export default class Dashboard extends Component {
         </a>
         <div className="watched">
           {this.state.watched.map(watched => (
-            <div>
-              <div className="watched__name">{watched.coinName} <span>{watched.coinPrice}</span><button onClick={() => this.deleteWatch(watched._id)}>Delete</button></div>
+            <div key = {watched._id} className="container">
+            <div className="row">
+              <div className="watched__name">{watched.coinName} <span>{watched.coinPrice}</span><a className="wave-effect wave-light btn" onClick={() => this.deleteWatch(watched._id)}>Delete</a></div>
+            </div>
             </div>
           ))}
         </div>
