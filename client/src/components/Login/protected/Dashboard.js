@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import API from "../../../utils/API";
-import firebase from '../../config/constants';
+import firebase from "../../config/constants";
 
 export default class Dashboard extends Component {
   state = {
     cName: "",
-    cPrice: ""
+    cPrice: "",
+    watched: [],
+    uid: firebase.auth().currentUser.uid
   };
+
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -14,15 +17,29 @@ export default class Dashboard extends Component {
     });
   };
 
-  saveCrypto = (name, price, uid) => {
-    API.saveCrypto({coinName: name, coinPrice: price, uid})
-    .then(this.setState({cName: "", cPrice: ""}))
+  componentDidMount() {
+    this.getWatched(this.state.uid);
   }
 
+  saveCrypto = (name, price, uid) => {
+    API.saveCrypto({ coinName: name, coinPrice: price, uid }).then(
+      this.setState({ cName: "", cPrice: "" })
+    );
+  };
+
+  getWatched = uid => {
+    console.log(uid);
+    API.getWatched(uid)
+      .then(res => this.setState({ watched: res.data }))
+      .catch(err => console.log(err + "failed to get watched"));
+  };
+
+  deleteWatch = watchId => {
+    API.deleteWatch(watchId).then(res => this.getWatched(this.state.uid));
+  };
 
   render() {
-
-    const uid = firebase.auth().currentUser.uid
+    const uid = firebase.auth().currentUser.uid;
 
     return (
       <div className="col m3">
@@ -40,10 +57,19 @@ export default class Dashboard extends Component {
         />
         <a
           className="wave-effect wave-light btn"
-          onClick={() => this.saveCrypto(this.state.cName, this.state.cPrice, uid)}
+          onClick={() =>
+            this.saveCrypto(this.state.cName, this.state.cPrice, uid)
+          }
         >
           Submit
         </a>
+        <div className="watched">
+          {this.state.watched.map(watched => (
+            <div>
+              <div className="watched__name">{watched.coinName} <span>{watched.coinPrice}</span><button onClick={() => this.deleteWatch(watched._id)}>Delete</button></div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
