@@ -23,13 +23,17 @@ export default class Dashboard extends Component {
 
   saveCrypto = (name, price, uid) => {
     API.saveCrypto({ coinName: name, coinPrice: price, uid })
-    .then(() => this.getWatched(this.state.uid));
+    .then(res => {
+       this.getWatched(this.state.uid)
+       
+      })
+      // () => this.getWatched(this.state.uid)));
   };
 
   getWatched = uid => {
     console.log(uid);
     API.getWatched(uid)
-      .then(res => this.setState({ watched: res.data }))
+      .then(res => this.setState({cName:"", cPrice:"", watched: res.data }))
       .catch(err => console.log(err + "failed to get watched"));
   };
 
@@ -66,7 +70,7 @@ export default class Dashboard extends Component {
           {this.state.watched.map(watched => (
             <div key = {watched._id} className="container">
             <div className="row">
-              <div className="watched__name">{watched.coinName} <span>{watched.coinPrice}</span><a className="wave-effect wave-light btn" onClick={() => this.deleteWatch(watched._id)}>Delete</a></div>
+              <div className="watched__name">{watched.coinName} <span>${watched.coinPrice}</span><a className="wave-effect wave-light btn" onClick={() => this.deleteWatch(watched._id)}>Delete</a></div>
             </div>
             </div>
           ))}
