@@ -8,16 +8,27 @@ router.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-router.post("/api/saveCoins", function(req, res) {
-  User.update(
-    { _id: req.session.user._id },
-    {
-      $push: {
-        coins: { coinName: req.body.coinName, coinPrice: req.body.coinPrice }
-      }
-    }
-  );
-});
+// router.post("/api/saveCoins", function(req, res) {
+//   User.update(
+//     { _id: req.session.user._id },
+//     {
+//       $push: {
+//         coins: { coinName: req.body.coinName, coinPrice: req.body.coinPrice }
+//       }
+//     }
+//   );
+// });
+
+const cryptoFunctions = {
+  create: function (req, res) {
+    db.User
+      .create(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.json(err));
+  }
+}
+
+router.post("/api/saveCoins/", cryptoFunctions.create);
 
 router.get("/api/coins", function(req, res) {
   var results = [];

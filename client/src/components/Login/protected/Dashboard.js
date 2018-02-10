@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../../../utils/API";
+import firebase from '../../config/constants';
 
 export default class Dashboard extends Component {
   state = {
@@ -12,13 +13,17 @@ export default class Dashboard extends Component {
       [name]: value
     });
   };
-  saveCrypto = (name, price) => {
-    API.saveCrypto({coinName: name, coinPrice: price})
-      .then(res => this.setState({ articles: res.data })
-    );
-  };
+
+  saveCrypto = (name, price, uid) => {
+    API.saveCrypto({coinName: name, coinPrice: price, uid})
+    .then(this.setState({cName: "", cPrice: ""}))
+  }
+
 
   render() {
+
+    const uid = firebase.auth().currentUser.uid
+
     return (
       <div>
         <label>Crypto Name</label>
@@ -35,7 +40,7 @@ export default class Dashboard extends Component {
         />
         <a
           className="wave-effect wave-light btn"
-          onClick={() => this.saveCrypto(this.state.cName, this.state.cPrice)}
+          onClick={() => this.saveCrypto(this.state.cName, this.state.cPrice, uid)}
         >
           Submit
         </a>
