@@ -25,10 +25,28 @@ const cryptoFunctions = {
       .create(req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.json(err));
+  },
+  findAll: function (req, res) {
+    db.User
+      .find({"uid":req.params.uid})
+      .sort({ saveNow: -1 })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  delete: function (req,res){
+    db.User
+    .findById({ _id: req.params.uid })
+    .then(dbModel => dbModel.remove())
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
   }
 }
 
 router.post("/api/saveCoins/", cryptoFunctions.create);
+
+router.get("/api/saveCoins/:uid", cryptoFunctions.findAll)
+
+router.delete("/api/saveCoins/delete/:uid", cryptoFunctions.delete);
 
 router.get("/api/coins", function(req, res) {
   var results = [];

@@ -25,7 +25,7 @@ export default class Dashboard extends Component {
     const uid = firebase.auth().currentUser.uid
 
     return (
-      <div>
+      <div className="col m3">
         <label>Crypto Name</label>
         <input
           value={this.state.cName}

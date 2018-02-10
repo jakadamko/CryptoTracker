@@ -145,10 +145,10 @@ export default class App extends Component {
             </div>
             {this.state.loadCryptos.map(coin => (
               <div className="row" key={coin.name}>
-              <div className="col m4 coinName" onClick={() => this.callChart(coin.abv)}>{coin.name}
+              <div className="col m3 coinName" onClick={() => this.callChart(coin.abv)}>{coin.name}
               </div>
-              <div className="col m4">{coin.price}</div>
-              <div className="col m4">{coin.percent}</div>
+              <div className="col m3">{coin.price}</div>
+              <div className="col m3">{coin.percent}</div>
               </div>
             ))}
           </div>
